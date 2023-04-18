@@ -1,0 +1,1 @@
+E:\Projects\Rider\NBody\NBody\x64\Debug\NBody.vcxproj.CopyComplete
