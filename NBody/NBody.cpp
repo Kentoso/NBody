@@ -18,27 +18,27 @@
 
 int main(void)
 {
-    double V[3] = {5., 40., 10.};
-    double d[3] = {1., 10e5, 5.,};
-    double m[3];
+    float V[3] = {25., 50., 40.};
+    float d[3] = {1., 10e5, 0.5,};
+    float m[3];
     for (int i = 0; i < NUMBER_OF_BODIES; ++i)
     {
         m[i] = V[i] * d[i];
     }
-    // double G = 10e-5;
-    double G = 10e-5;
-    double epsilon = 10e-1;
-    Eigen::MatrixXd p {
-        {-100, 0},
+    // float G = 10e-5;
+    float G = 10e-5;
+    float epsilon = 10e-1;
+    Eigen::MatrixXf p {
+        {-200, 0},
         {0, 0},
-        {200, 0}
+        {600, 0}
     };
-    Eigen::MatrixXd v {
-        {-0.5, 2.5},
+    Eigen::MatrixXf v {
+        {-0.5, 5},
         {0, 0},
         {0, -3}
     };
-    Eigen::MatrixXd a {
+    Eigen::MatrixXf a {
             {0, 0},
             {0, 0},
             {0, 0}
@@ -47,15 +47,21 @@ int main(void)
     const int screenWidth = 1000;
     const int screenHeight = 600;
     int mapSize = 500;
+
+
+    SetWindowState(FLAG_MSAA_4X_HINT);
     InitWindow(screenWidth, screenHeight, "n-body");
-    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT | FLAG_VSYNC_HINT);
+    SetWindowState(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
+    // ClearWindowState(FLAG_VSYNC_HINT);
+    // SetWindowState(FLAG_WINDOW_RESIZABLE);
+    
     initDearImGui(screenWidth, screenHeight);
 
     bool show = true;
     
     SetTargetFPS(60); 
-    Eigen::MatrixXd D;
-    Eigen::VectorXd norms(NUMBER_OF_BODIES);
+    Eigen::MatrixXf D;
+    Eigen::VectorXf norms(NUMBER_OF_BODIES);
     Camera2D camera;
     camera.offset = Vector2 {screenWidth / 2, screenHeight / 2};
     // camera.target = Vector2 {screenWidth / 2, screenHeight / 2};
@@ -94,7 +100,7 @@ int main(void)
                 for (int j = 0; j < NUMBER_OF_BODIES; ++j)
                 {
                     if (i == j) continue;
-                    double otherMass = m[j];
+                    float otherMass = m[j];
                     a.row(i) += otherMass * (p.row(j) - p.row(i)) / pow(D(i, j) + epsilon * epsilon, 1.5);
                 }
                 a.row(i) *= G;
